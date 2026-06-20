@@ -1,120 +1,101 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kalkulator Slippage Swap</title>
-<style>
-  body{
-    font-family:Arial,sans-serif;
-    background:#f6f7fb;
-    color:#111;
-    padding:24px;
-    max-width:760px;
-    margin:auto
-  }
-  .card{
-    background:#fff;
-    border:1px solid #e5e7eb;
-    border-radius:16px;
-    padding:20px;
-    box-shadow:0 8px 24px rgba(0,0,0,.06)
-  }
-  h1{
-    font-size:24px;
-    margin:0 0 12px
-  }
-  p{
-    margin:0 0 16px;
-    color:#555
-  }
-  label{
-    display:block;
-    margin:14px 0 6px;
-    font-weight:700
-  }
-  input{
-    width:100%;
-    padding:12px 14px;
-    border:1px solid #cbd5e1;
-    border-radius:10px;
-    font-size:16px;
-    box-sizing:border-box
-  }
-  button{
-    margin-top:16px;
-    background:#2563eb;
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    padding:12px 16px;
-    font-size:16px;
-    font-weight:700;
-    cursor:pointer
-  }
-  button:hover{
-    background:#1d4ed8
-  }
-  .result{
-    margin-top:18px;
-    padding:14px;
-    background:#eff6ff;
-    border:1px solid #bfdbfe;
-    border-radius:12px
-  }
-  .small{
-    font-size:13px;
-    color:#6b7280;
-    margin-top:8px
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalkulator Burn CC</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .card {
+      max-width: 420px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 16px;
+      padding: 12px;
+      background: #eef6ff;
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
   <div class="card">
-    <h1>Kalkulator Slippage Swap</h1>
-    <p>Masukkan modal awal, sisa setelah swap, dan jumlah transaksi. Hasil ditampilkan sebagai slippage per swap.</p>
+    <h2>Kalkulator Burn CC per Transaksi</h2>
 
-    <label for="modal">Modal awal</label>
-    <input id="modal" type="number" step="any" value="350" />
+    <label for="modal">Modal awal (cc)</label>
+    <input type="number" id="modal" step="0.001" value="350">
 
-    <label for="sisa">Sisa setelah swap</label>
-    <input id="sisa" type="number" step="any" value="316.974" />
+    <label for="sisa">Sisa (cc)</label>
+    <input type="number" id="sisa" step="0.001" value="316.974">
 
-    <label for="tx">Jumlah transaksi swap</label>
-    <input id="tx" type="number" step="1" value="10" />
+    <label for="tx">Jumlah transaksi</label>
+    <input type="number" id="tx" step="1" value="10">
 
     <button onclick="hitung()">Hitung</button>
 
-    <div class="result" id="hasil">Hasil akan muncul di sini.</div>
-
-    <div class="small">
-      Rumus: total drop = modal awal - sisa. Slippage per swap = (total drop / jumlah transaksi) / modal awal × 100.
+    <div class="result" id="hasil">
+      Hasil akan tampil di sini.
     </div>
   </div>
 
-<script>
-function formatID(n, digits){
-  return new Intl.NumberFormat('id-ID', {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits
-  }).format(n)
-}
+  <script>
+    function hitung() {
+      const modal = parseFloat(document.getElementById('modal').value) || 0;
+      const sisa = parseFloat(document.getElementById('sisa').value) || 0;
+      const tx = parseFloat(document.getElementById('tx').value) || 0;
 
-function hitung(){
-  const modal = parseFloat(document.getElementById('modal').value) || 0;
-  const sisa = parseFloat(document.getElementById('sisa').value) || 0;
-  const tx = parseFloat(document.getElementById('tx').value) || 1;
+      if (tx <= 0) {
+        document.getElementById('hasil').innerHTML = "Jumlah transaksi harus lebih dari 0.";
+        return;
+      }
 
-  const totalDrop = modal - sisa;
-  const perTx = totalDrop / tx;
-  const slippage = modal ? (perTx / modal) * 100 : 0;
+      const totalBurn = modal - sisa;
+      const burnPerTx = totalBurn / tx;
 
-  document.getElementById('hasil').innerHTML = `
-    <div><b>Slippage:</b> ${formatID(slippage, 4)}%</div>
-  `;
-}
+      document.getElementById('hasil').innerHTML = `
+        Total burn: <b>${totalBurn.toFixed(3)} cc</b><br>
+        Burn per transaksi: <b>${burnPerTx.toFixed(4)} cc</b>
+      `;
+    }
 
-window.onload = hitung;
-</script>
+    hitung();
+  </script>
 </body>
 </html>
