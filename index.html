@@ -53,6 +53,14 @@
       border-radius: 8px;
       line-height: 1.6;
     }
+    .untung {
+      color: green;
+      font-weight: bold;
+    }
+    .rugi {
+      color: red;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -92,10 +100,19 @@
       const burnPerTx = totalBurn / tx;
       const profit = reward - totalBurn;
 
+      let profitLabel = "";
+      if (profit > 0) {
+        profitLabel = "<span class='untung'>Untung: " + profit.toFixed(3) + " CC</span>";
+      } else if (profit < 0) {
+        profitLabel = "<span class='rugi'>Rugi: " + profit.toFixed(3) + " CC</span>";
+      } else {
+        profitLabel = "<span>Profit: 0 CC</span>";
+      }
+
       document.getElementById('hasil').innerHTML = `
         Total burn: <b>${totalBurn.toFixed(3)} CC</b><br>
         Burn per transaksi: <b>${burnPerTx.toFixed(4)} CC</b><br>
-        Profit: <b>${profit.toFixed(3)} CC</b>
+        ${profitLabel}
       `;
     }
 
