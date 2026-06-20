@@ -22,6 +22,17 @@
       margin-top: 0;
       font-size: 20px;
     }
+    .note {
+      font-size: 13px;
+      color: #666;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      line-height: 1.4;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 6px;
+      border-left: 3px solid #007bff;
+    }
     label {
       display: block;
       margin-top: 12px;
@@ -66,6 +77,9 @@
 <body>
   <div class="card">
     <h2>Kalkulator Silvana</h2>
+    <div class="note">
+      Kosongkan Reward CC untuk menghitung Total Burn CC. Isi Reward CC untuk menghitung Untung/Rugi.
+    </div>
 
     <label for="modal">Modal CC</label>
     <input type="number" id="modal" step="0.001" value="">
@@ -106,6 +120,7 @@
         Burn per transaksi: <b>${burnPerTx.toFixed(4)} CC</b>
       `;
 
+      // Hanya tampilkan Untung/Rugi jika reward diisi
       if (rewardInput !== "" && rewardInput !== null) {
         if (profit > 0) {
           hasilHTML += `<br><span class='untung'>Untung: ${profit.toFixed(3)} CC</span>`;
