@@ -88,7 +88,8 @@
     function hitung() {
       const modal = parseFloat(document.getElementById('modal').value) || 0;
       const sisa = parseFloat(document.getElementById('sisa').value) || 0;
-      const reward = parseFloat(document.getElementById('reward').value) || 0;
+      const rewardInput = document.getElementById('reward').value;
+      const reward = rewardInput ? parseFloat(rewardInput) : 0;
       const tx = parseFloat(document.getElementById('tx').value) || 0;
 
       if (tx <= 0) {
@@ -100,20 +101,22 @@
       const burnPerTx = totalBurn / tx;
       const profit = reward - totalBurn;
 
-      let profitLabel = "";
-      if (profit > 0) {
-        profitLabel = "<span class='untung'>Untung: " + profit.toFixed(3) + " CC</span>";
-      } else if (profit < 0) {
-        profitLabel = "<span class='rugi'>Rugi: " + profit.toFixed(3) + " CC</span>";
-      } else {
-        profitLabel = "<span>Profit: 0 CC</span>";
+      let hasilHTML = `
+        Total burn: <b>${totalBurn.toFixed(3)} CC</b><br>
+        Burn per transaksi: <b>${burnPerTx.toFixed(4)} CC</b>
+      `;
+
+      if (rewardInput !== "" && rewardInput !== null) {
+        if (profit > 0) {
+          hasilHTML += `<br><span class='untung'>Untung: ${profit.toFixed(3)} CC</span>`;
+        } else if (profit < 0) {
+          hasilHTML += `<br><span class='rugi'>Rugi: ${profit.toFixed(3)} CC</span>`;
+        } else {
+          hasilHTML += `<br><span>Profit: 0 CC</span>`;
+        }
       }
 
-      document.getElementById('hasil').innerHTML = `
-        Total burn: <b>${totalBurn.toFixed(3)} CC</b><br>
-        Burn per transaksi: <b>${burnPerTx.toFixed(4)} CC</b><br>
-        ${profitLabel}
-      `;
+      document.getElementById('hasil').innerHTML = hasilHTML;
     }
 
     hitung();
